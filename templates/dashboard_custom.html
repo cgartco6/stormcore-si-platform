@@ -1,0 +1,55 @@
+<div class="bg-gray-900/40 border border-gray-800 rounded-xl p-6 space-y-6 h-fit backdrop-blur-md">
+    <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-white">Visual Layout Stylist</h3>
+        <p class="text-[11px] text-gray-500 mt-0.5">Select visual alignment parameters prior to initializing asset pack downloads.</p>
+    </div>
+    
+    <div class="space-y-2">
+        <label class="flex items-center gap-3 p-3 bg-gray-950 border border-gray-800 rounded-xl cursor-pointer hover:border-gray-700 transition">
+            <input type="radio" name="visual_style" value="professional" class="accent-emerald-500" checked>
+            <div>
+                <span class="text-xs font-bold text-white block">Corporate Professional</span>
+                <span class="text-[10px] text-gray-500 font-mono block">Executive Navy | High-Trust Structure</span>
+            </div>
+        </label>
+
+        <label class="flex items-center gap-3 p-3 bg-gray-950 border border-gray-800 rounded-xl cursor-pointer hover:border-gray-700 transition">
+            <input type="radio" name="visual_style" value="modern" class="accent-emerald-500">
+            <div>
+                <span class="text-xs font-bold text-white block">Sleek Modern Slate</span>
+                <span class="text-[10px] text-gray-500 font-mono block">Emerald Green Accents | Minimalist Tech</span>
+            </div>
+        </label>
+
+        <label class="flex items-center gap-3 p-3 bg-gray-950 border border-gray-800 rounded-xl cursor-pointer hover:border-gray-700 transition">
+            <input type="radio" name="visual_style" value="traditional" class="accent-emerald-500">
+            <div>
+                <span class="text-xs font-bold text-white block">Classic Traditional Elegant</span>
+                <span class="text-[10px] text-gray-500 font-mono block">Timeless Monochrome Black | Pure Print Layout</span>
+            </div>
+        </label>
+    </div>
+
+    <hr class="border-gray-800/80">
+
+    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Sovereign Asset Exporter</h3>
+    <p class="text-[11px] text-gray-500 leading-relaxed">Download complete compiled career documents natively in standard high-fidelity structures below.</p>
+    
+    <div class="space-y-2 text-xs font-semibold">
+        <button onclick="triggerStyledDownload('docx')" class="w-full p-2.5 bg-gray-800 hover:bg-gray-700 text-center text-white block rounded-xl border border-gray-700 transition font-bold">
+            Download Document Layout (.docx)
+        </button>
+        <button onclick="triggerStyledDownload('pdf')" class="w-full p-2.5 bg-gray-800 hover:bg-gray-700 text-center text-white block rounded-xl border border-gray-700 transition font-bold">
+            Download Print Record (.pdf)
+        </button>
+    </div>
+</div>
+
+<script>
+    function triggerStyledDownload(formatType) {
+        // Find whichever radio option is checked inside the custom selection container array
+        const selectedStyle = document.querySelector('input[name="visual_style"]:checked').value;
+        // Build routing string query variables directly onto endpoint link execution paths
+        window.location.href = `/api/download/${formatType}?style=${selectedStyle}`;
+    }
+</script>
