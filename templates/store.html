@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="space-y-8">
+    <div>
+        <h1 class="text-2xl font-extrabold text-white">Stormcore Native Commerce Matrix</h1>
+        <p class="text-xs text-gray-400 mt-1">Activate once-off delivery packs or monthly recurring automation subscriptions. No artificial dynamic friction tags.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for p in products %}
+        <div class="bg-gray-900/40 border border-gray-800 rounded-2xl p-6 flex flex-col justify-between shadow-lg space-y-4">
+            <div>
+                <span class="px-2 py-0.5 bg-gray-800 rounded font-mono text-[9px] font-bold text-emerald-400 uppercase tracking-widest border border-gray-700">
+                    {{ p.type.replace('_', ' ') }}
+                </span>
+                <h3 class="text-md font-bold text-white mt-2 leading-tight">{{ p.name }}</h3>
+                <p class="text-xs text-gray-500 mt-2 font-mono">Tier Group: System {{ p.tier.capitalize() }} Access Allocation</p>
+            </div>
+            
+            <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                <span class="text-lg font-black text-white">R {{ "%.2f"|format(p.price) }} <span class="text-[10px] text-gray-500 font-normal">ZAR</span></span>
+                <button onclick="addToCart('{{ p.id }}')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-black font-bold text-xs rounded-lg transition">
+                    Add to Pack Cart
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    async function addToCart(productId) {
+        const res = await fetch('/api/cart/add', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ product_id: productId })
+        });
+        if(res.ok) {
+            alert('Product variant successfully registered in active shopping cart.');
+        }
+    }
+</script>
+{% endblock %}
