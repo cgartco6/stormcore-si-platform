@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-gray-900/40 border border-gray-800 rounded-2xl p-6 md:p-8 space-y-6 shadow-xl">
+    <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+        <h1 class="text-xl font-bold text-white">Active Product Variant Cart</h1>
+        <a href="/api/cart/clear" class="text-xs text-red-400 hover:underline">Flush Cart Selection</a>
+    </div>
+
+    {% if cart %}
+    <div class="space-y-4 divide-y divide-gray-800">
+        {% for item in cart %}
+        <div class="pt-4 flex justify-between items-center text-xs">
+            <div>
+                <p class="font-bold text-white">{{ item.name }}</p>
+                <p class="text-[10px] text-gray-500 uppercase tracking-wider mt-0.5 font-mono">{{ item.type }} | {{ item.tier }} tier</p>
+            </div>
+            <span class="font-mono font-bold text-emerald-400">R {{ "%.2f"|format(item.price) }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="border-t border-gray-800 pt-6 space-y-4">
+        <div class="flex justify-between items-center font-bold">
+            <span class="text-xs uppercase font-mono tracking-wider text-gray-400">Total Manifest Cost Valuation</span>
+            <span class="text-xl font-black text-white">R {{ "%.2f"|format(total) }} ZAR</span>
+        </div>
+
+        <div class="space-y-3">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-emerald-400">Select Integration Processing Link Gateway</label>
+            <select id="gateway" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                <option value="direct_eft">Direct EFT Verification Protocol (FNB Business Wire)</option>
+                <option value="payfast">PayFast Portal Gateway (Live ZAR Debit Matrix)</option>
+                <option value="ozow">Ozow Smart Bank Interface Verification</option>
+                <option value="peach">Peach Payments Integration Architecture</option>
+                <option value="stripe">Stripe Global Processing Gateway (USD Clearing Nodes)</option>
+            </select>
+        </div>
+
+        <button id="checkoutBtn" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-extrabold text-xs tracking-widest uppercase rounded-xl hover:opacity-95 transition">
+            Finalize Transaction Authentication Sequence
+        </button>
+        
+        <div id="checkoutLog" class="hidden text-[11px] bg-gray-950 p-4 border border-gray-800 rounded-xl font-mono text-gray-400 whitespace-pre-wrap"></div>
+    </div>
+    {% else %}
+    <p class="text-xs text-gray-500 italic text-center py-10">Shopping cart contains no structural line variants. Visit the store grid to load options.</p>
+    {% endif %}
+</div>
+
+<script>
+    if(document.getElementById('checkoutBtn')) {
+        document.getElementById('checkoutBtn').addEventListener('click', async () => {
+            const gateway = document.getElementById('gateway').value;
+            const log = document.getElementById('checkoutLog');
+            log.classList.remove('hidden');
+            log.innerText = 'Initializing payment transaction flow components...';
+            
+            const res = await fetch('/api/payment/checkout', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ gateway: gateway, amount: {{ total|default(0) }}, tier: '{{ cart[0].tier if cart else "free" }}' })
+            });
+            const data = await res.json();
+            
+            if(data.status === 'redirect') {
+                log.innerText = 'Redirecting execution focus window to secure provider endpoint framework...';
+                window.location.href = data.url;
+            } else if(data.status === 'success') {
+                log.innerText = `[TRANSACTION REGISTERED]\nID: ${data.tx_id}\nGateway Vector: ${gateway.toUpperCase()}\nStatus: Compliance Cleared. Account Tier upgraded inside the platform database layer safely. Check Customer Dashboard for unlocked exports.`;
+            } else {
+                log.innerText = 'Transaction configuration failure notification: ' + data.message;
+            }
+        });
+    }
+</script>
+{% endblock %}
