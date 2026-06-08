@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="space-y-8">
+    <div class="border-b border-gray-800 pb-4">
+        <h1 class="text-xl font-bold text-white">System Administrator Control Core</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Global operational visibility metrics, traffic indexes, and system ingestion validation values.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 font-mono">
+        <div class="bg-gray-900/40 border border-gray-800 p-5 rounded-xl">
+            <span class="text-[10px] uppercase text-gray-500 block">Daily Basic Signups Goal</span>
+            <span class="text-2xl font-black text-emerald-400 mt-1 block">{{ metrics.daily_signups_basic }} / 50</span>
+            <p class="text-[9px] text-gray-600 mt-2">Target Impulse Conversion Parameter Matrix</p>
+        </div>
+        <div class="bg-gray-900/40 border border-gray-800 p-5 rounded-xl">
+            <span class="text-[10px] uppercase text-gray-500 block">Impulse Click Ingestions</span>
+            <span class="text-2xl font-black text-white mt-1 block">{{ metrics.impulse_clicks }}</span>
+            <p class="text-[9px] text-gray-600 mt-2">Daily inbound campaign tracking metrics</p>
+        </div>
+        <div class="bg-gray-900/40 border border-gray-800 p-5 rounded-xl">
+            <span class="text-[10px] uppercase text-gray-500 block">Total Conversions Today</span>
+            <span class="text-2xl font-black text-white mt-1 block">{{ metrics.conversions_today }}</span>
+            <p class="text-[9px] text-gray-600 mt-2">Cross-tier user payment validation check</p>
+        </div>
+        <div class="bg-gray-900/40 border border-gray-800 p-5 rounded-xl">
+            <span class="text-[10px] uppercase text-gray-500 block">Aggregated Campaign Spend</span>
+            <span class="text-2xl font-black text-indigo-400 mt-1 block">R {{ metrics.total_ad_spend_zar }}</span>
+            <p class="text-[9px] text-gray-600 mt-2">Paid traffic infrastructure optimization valuation</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
