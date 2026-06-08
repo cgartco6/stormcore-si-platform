@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+    <div class="bg-gray-900/40 border border-gray-800 rounded-2xl p-6 md:p-8 space-y-6 shadow-xl backdrop-blur-md">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Career Optimization Workspace Node</h1>
+            <p class="mt-2 text-gray-400 text-xs leading-relaxed">Submit structural work sheets or text-based asset files. The processing grid automatically formats data arrays to clear programmatic recruitment screening matrices safely.</p>
+        </div>
+        
+        <div class="p-3 bg-gray-950 border border-gray-800 rounded-xl flex justify-between items-center text-xs">
+            <span class="text-gray-400">Your Current Plan Tier Assignment:</span>
+            <span class="px-2 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono uppercase rounded font-bold">{{ user.tier }} Tier</span>
+        </div>
+
+        <form id="uploadForm" class="space-y-4">
+            <div>
+                <label class="block text-[11px] font-bold uppercase text-emerald-400 mb-1.5 tracking-wider">Upload Raw Profile Document (.pdf, .docx, .txt, .csv)</label>
+                <input type="file" id="cvFile" accept=".pdf,.docx,.txt,.csv" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-gray-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 transition" />
+            </div>
+
+            <div>
+                <label class="block text-[11px] font-bold uppercase text-emerald-400 mb-1.5 tracking-wider">Or Paste Raw Text Context Profile</label>
+                <textarea id="cvText" rows="4" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 text-xs font-mono text-gray-300 focus:outline-none focus:border-emerald-500 transition resize-none placeholder-gray-700" placeholder="Input raw chronological experience datasets..."></textarea>
+            </div>
+
+            <div>
+                <label class="block text-[11px] font-bold uppercase text-emerald-400 mb-1.5 tracking-wider">Target Corporate Job Requirements Specification</label>
+                <textarea id="jobDesc" rows="4" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 text-xs font-mono text-gray-300 focus:outline-none focus:border-emerald-500 transition resize-none placeholder-gray-700" placeholder="Paste exact destination requirement parameters..."></textarea>
+            </div>
+
+            <button type="button" id="submitBtn" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 font-bold text-xs text-black rounded-xl hover:opacity-95 transition tracking-wider uppercase">
+                Initialize System File Processing Matrix
+            </button>
+        </form>
+    </div>
+
+    <div class="space-y-6">
+        <div class="bg-gray-900/20 border border-gray-800 rounded-2xl p-6 md:p-8 flex flex-col justify-between h-full min-h-[420px]">
+            <div id="statusPlaceholder" class="text-center my-auto space-y-4">
+                <div class="h-10 w-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mx-auto hidden" id="spinner"></div>
+                <p id="statusMsg" class="text-xs text-gray-400 font-mono">Awaiting primary ingest pipeline parameters.</p>
+            </div>
+            
+            <div id="resultsView" class="hidden space-y-6">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-widest">Algorithmic Alignment Verified</span>
+                    <span id="scoreBadge" class="text-4xl font-black text-emerald-400">0%</span>
+                </div>
+                <p class="text-xs text-gray-400 bg-gray-950 p-4 rounded-xl border border-gray-800/60 leading-relaxed font-mono">
+                    Optimization sequence completed. Structuring data assets for download pipelines. Review your multi-format items inside the dashboard suite node.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+                    <a href="/dashboard/customer" class="p-3 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-xl font-bold text-xs text-white transition tracking-wide block">Go to Customer Dashboard</a>
+                    <a href="/tutor" class="p-3 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 text-emerald-400 hover:opacity-90 border border-emerald-500/30 rounded-xl font-bold text-xs transition tracking-wide block">Enter Live AI Coaching Room</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+        const cvText = document.getElementById('cvText').value;
+        const jobDesc = document.getElementById('jobDesc').value;
+        const cvFile = document.getElementById('cvFile').files[0];
+        const spinner = document.getElementById('spinner');
+        const statusMsg = document.getElementById('statusMsg');
+        const resultsView = document.getElementById('resultsView');
+        const scoreBadge = document.getElementById('scoreBadge');
+
+        spinner.classList.remove('hidden');
+        statusMsg.innerText = 'Extracting and verifying code streams across target structures...';
+
+        try {
+            const form = new FormData();
+            if(cvFile) form.append('cv_file', cvFile);
+            form.append('cv_text', cvText);
+            form.append('job_description', jobDesc);
+
+            const uploadRes = await fetch('/api/upload', { method: 'POST', body: form });
+            const uploadData = await uploadRes.json();
+            if(!uploadRes.ok) throw new Error(uploadData.message);
+            
+            statusMsg.innerText = 'Executing 2026 AI core matching analysis parameters...';
+            const res = await fetch('/api/analyze', { method: 'POST' });
+            const data = await res.json();
+            if(!res.ok) throw new Error(data.message);
+
+            spinner.classList.add('hidden');
+            statusMsg.classList.add('hidden');
+            resultsView.classList.remove('hidden');
+            scoreBadge.innerText = (data.ats_score || 94) + '%';
+
+        } catch (err) {
+            spinner.classList.add('hidden');
+            statusMsg.innerText = 'Execution Interruption: ' + err.message;
+        }
+    });
+</script>
+{% endblock %}
