@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="space-y-8">
+    <div class="border-b border-gray-800 pb-4 flex justify-between items-center">
+        <div>
+            <h1 class="text-xl font-bold text-white">Dynamic Customer Records Console</h1>
+            <p class="text-xs text-gray-400 mt-0.5">Secure, isolated dashboard layer displaying current credential matching structures.</p>
+        </div>
+        <span class="px-3 py-1 bg-gray-900 border border-gray-800 text-emerald-400 font-mono text-xs font-bold uppercase rounded-lg">
+            Active Tier: {{ user.tier }}
+        </span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-gray-900/40 border border-gray-800 rounded-xl p-5 space-y-2">
+                <h3 class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Optimized Resume Output Preview</h3>
+                <div class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 text-xs font-mono text-gray-400 h-48 overflow-y-auto whitespace-pre-wrap">{% if user.optimized_cv %}{{ user.optimized_cv }}{% else %}No optimization manifest active. Submit profile sheets in the main workspace grid.{% endif %}</div>
+            </div>
+
+            <div class="bg-gray-900/40 border border-gray-800 rounded-xl p-5 space-y-2">
+                <h3 class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Generated Cover Letter Output Preview</h3>
+                <div class="w-full bg-gray-950 border border-gray-800 rounded-xl p-4 text-xs font-mono text-gray-400 h-48 overflow-y-auto whitespace-pre-wrap">{% if user.cover_letter %}{{ user.cover_letter }}{% else %}No cover letter manifest active. Submit profile sheets in the main workspace grid.{% endif %}</div>
+            </div>
+        </div>
+
+        <div class="bg-gray-900/40 border border-gray-800 rounded-xl p-6 space-y-6 h-fit">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Sovereign Asset Exporter Terminal</h3>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Download complete compiled career documents natively in standard multi-format structures below.</p>
+            
+            <div class="space-y-2 text-xs font-semibold">
+                <a href="/api/download/txt" class="w-full p-2.5 bg-gray-800 hover:bg-gray-700 text-center text-white block rounded-xl border border-gray-700 transition">Download Plain Text Manifest (.txt)</a>
+                <a href="/api/download/csv" class="w-full p-2.5 bg-gray-800 hover:bg-gray-700 text-center text-white block rounded-xl border border-gray-700 transition">Download Comma Separated Sheet (.csv)</a>
+                <a href="/api/download/docx" class="w-full p-2.5 bg-gray-800 hover:bg-gray-700 text-center text-white block rounded-xl border border-gray-700 transition">Download Microsoft Word Layout (.docx)</a>
+                <a href="/api/download/pdf" class="w-full p-2.5 bg-gray-800 hover:bg-gray-700 text-center text-white block rounded-xl border border-gray-700 transition">Download Document Print Record (.pdf)</a>
+                <a href="/api/download/zip" class="w-full p-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-center text-black font-bold block rounded-xl shadow-lg shadow-emerald-500/10 transition">Download Complete Master Bundle ZIP (.zip)</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
