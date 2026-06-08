@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto flex flex-col justify-between min-h-[500px]">
+    <div class="border-b border-gray-800 pb-4 mb-6">
+        <h1 class="text-xl font-bold text-white">Live 2026 Executive Interview Room</h1>
+        <p class="text-xs text-gray-400">Strict behavioral validation simulation loops. Evaluates your communications structure directly against modern screening algorithms.</p>
+    </div>
+
+    <div class="flex-1 bg-gray-950 border border-gray-800/80 rounded-2xl p-6 min-h-[350px] max-h-[450px] overflow-y-auto space-y-4 font-mono text-xs" id="chatConsole">
+        <div class="bg-gray-900/60 p-4 rounded-xl border border-gray-800 max-w-[80%]">
+            <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-1">Stormcore Coach Node</p>
+            <p class="text-gray-300 leading-relaxed">Session initialized. Input response streams to evaluate communication parameters against high-stakes interview criteria.</p>
+        </div>
+    </div>
+
+    <div class="mt-6 flex gap-3">
+        <input type="text" id="userInput" class="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono" placeholder="Input conversational response string configuration...">
+        <button id="sendBtn" class="px-6 bg-emerald-500 font-bold text-xs text-black rounded-xl hover:opacity-95 transition tracking-wider uppercase">Transmit Answer</button>
+    </div>
+</div>
+
+<script>
+    const sendBtn = document.getElementById('sendBtn');
+    const userInput = document.getElementById('userInput');
+    const chatConsole = document.getElementById('chatConsole');
+
+    sendBtn.addEventListener('click', async () => {
+        const txt = userInput.value.trim();
+        if(!txt) return;
+        userInput.value = '';
+        
+        const userDiv = document.createElement('div');
+        userDiv.className = 'bg-emerald-500/5 p-4 rounded-xl border border-emerald-500/20 max-w-[80%] ml-auto text-right';
+        userDiv.innerHTML = `<p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-1">Candidate Profile Stream</p><p class="text-gray-200">${txt}</p>`;
+        chatConsole.appendChild(userDiv);
+        chatConsole.scrollTop = chatConsole.scrollHeight;
+
+        try {
+            const res = await fetch('/api/tutor/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: txt })
+            });
+            const data = await res.json();
+
+            const coachDiv = document.createElement('div');
+            coachDiv.className = 'bg-gray-900/60 p-4 rounded-xl border border-gray-800 max-w-[80%]';
+            coachDiv.innerHTML = `<p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-1">Stormcore Coach Node</p><p class="text-gray-300 leading-relaxed">${data.response}</p>`;
+            chatConsole.appendChild(coachDiv);
+            chatConsole.scrollTop = chatConsole.scrollHeight;
+
+        } catch (err) {
+            console.error(err);
+        }
+    });
+</script>
+{% endblock %}
