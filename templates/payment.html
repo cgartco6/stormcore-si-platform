@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+    <!-- Header Block -->
+    <div class="border-b border-gray-800 pb-4">
+        <h1 class="text-2xl font-extrabold text-white tracking-tight">Sovereign Payment Gateways Node</h1>
+        <p class="text-xs text-gray-400 mt-1">2026 Integrated Settlement Engine for localized South African and global clearing structures.</p>
+    </div>
+
+    <!-- Main Two-Column Layout (Responsive for Mobile Breakdown) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        
+        <!-- Left Pane: Settlement Selector & Authorization Controls -->
+        <div class="lg:col-span-2 bg-gray-900/40 border border-gray-800 rounded-2xl p-6 space-y-6 shadow-xl backdrop-blur-md">
+            <div>
+                <h3 class="text-sm font-bold text-white">1. Select Target Tier Asset Match</h3>
+                <p class="text-[11px] text-gray-500 mt-0.5">Choose the access configuration profile to clear through the ledger matrix.</p>
+            </div>
+
+            <!-- Interactive Tier Radio Group -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Free Tier -->
+                <label class="relative flex flex-col p-4 bg-gray-950 border border-gray-800 rounded-xl cursor-pointer select-none hover:border-gray-700 transition">
+                    <input type="radio" name="tier_select" value="free" class="absolute right-4 top-4 accent-emerald-500" checked onclick="updatePricing(0, 'free')">
+                    <span class="text-xs font-bold text-white">Free Basic Tier</span>
+                    <span class="text-[10px] text-gray-500 mt-1 font-mono">1 Free Lifetime Credit</span>
+                    <span class="text-md font-black text-emerald-400 mt-3 font-mono">R 0.00</span>
+                </label>
+
+                <!-- Basic Once-Off -->
+                <label class="relative flex flex-col p-4 bg-gray-950 border border-gray-800 rounded-xl cursor-pointer select-none hover:border-gray-700 transition">
+                    <input type="radio" name="tier_select" value="basic" class="absolute right-4 top-4 accent-emerald-500" onclick="updatePricing(150, 'basic')">
+                    <span class="text-xs font-bold text-white">Basic Once-Off Pack</span>
+                    <span class="text-[10px] text-gray-500 mt-1 font-mono">Full Resume Blueprint</span>
+                    <span class="text-md font-black text-emerald-400 mt-3 font-mono">R 150.00</span>
+                </label>
+
+                <!-- Pro Subscription -->
+                <label class="relative flex flex-col p-4 bg-gray-950 border border-gray-800 rounded-xl cursor-pointer select-none hover:border-gray-700 transition">
+                    <input type="radio" name="tier_select" value="pro" class="absolute right-4 top-4 accent-emerald-500" onclick="updatePricing(300, 'pro')">
+                    <span class="text-xs font-bold text-white">Pro Monthly Sub</span>
+                    <span class="text-[10px] text-gray-500 mt-1 font-mono">Continuous Placement Loop</span>
+                    <span class="text-md font-black text-emerald-400 mt-3 font-mono">R 300.00 <span class="text-[9px] text-gray-500 font-normal">/mo</span></span>
+                </label>
+
+                <!-- AI Tutor Subscription -->
+                <label class="relative flex flex-col p-4 bg-gray-950 border border-gray-800 rounded-xl cursor-pointer select-none hover:border-gray-700 transition">
+                    <input type="radio" name="tier_select" value="tutor" class="absolute right-4 top-4 accent-emerald-500" onclick="updatePricing(450, 'tutor')">
+                    <span class="text-xs font-bold text-white">AI Coach Room Access</span>
+                    <span class="text-[10px] text-gray-500 mt-1 font-mono">Real-Time Interview Module</span>
+                    <span class="text-md font-black text-emerald-400 mt-3 font-mono">R 450.00 <span class="text-[9px] text-gray-500 font-normal">/mo</span></span>
+                </label>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <h3 class="text-sm font-bold text-white">2. Select Payment Clearing Vector</h3>
+                    <p class="text-[11px] text-gray-500 mt-0.5">Local South African rails or USD-denominated cross-border clearing nodes.</p>
+                </div>
+                
+                <select id="paymentGateway" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono tracking-wide">
+                    <optgroup label="South African Local Gateways (ZAR)">
+                        <option value="direct_eft">Direct EFT Verification Protocol (FNB Instant Wire)</option>
+                        <option value="payfast">PayFast Portal Gateway (Debit/Credit Settlement)</option>
+                        <option value="ozow">Ozow Automated Instant EFT Link</option>
+                        <option value="peach">Peach Payments Enterprise Matrix</option>
+                    </optgroup>
+                    <optgroup label="Global Multi-Currency Networks (USD Equivalent)">
+                        <option value="stripe">Stripe Integrated Global Pipeline</option>
+                        <option value="paypal">PayPal Digital Checkout Node</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- Mobile Touch Optimized Action Trigger Button -->
+            <button id="executePaymentBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-extrabold text-xs tracking-widest uppercase rounded-xl hover:opacity-95 transition shadow-lg shadow-emerald-500/10">
+                Authorize Financial Routing Instructions
+            </button>
+        </div>
+
+        <!-- Right Pane: Real-time Ledger Manifest Summary & Compliance Output -->
+        <div class="space-y-6">
+            <!-- Dynamic Cost Box -->
+            <div class="bg-gray-900/40 border border-gray-800 rounded-2xl p-6 font-mono space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400">Ledger Evaluation</h3>
+                
+                <div class="space-y-2 text-xs border-b border-gray-800 pb-4">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Selected Option:</span>
+                        <span id="summaryTier" class="text-white font-bold uppercase">Free Tier</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Base Valuation:</span>
+                        <span id="summaryCost" class="text-emerald-400 font-bold">R 0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Currency Unit:</span>
+                        <span class="text-gray-400">ZAR (South Africa)</span>
+                    </div>
+                </div>
+
+                <!-- Instant Automated Split Disclosures -->
+                <div class="space-y-2 text-[10px] text-gray-500">
+                    <span class="font-bold text-gray-400 block uppercase tracking-wider">Automated Revenue Split Matrix:</span>
+                    <div class="flex justify-between">
+                        <span>50% FNB Corporate Vault:</span>
+                        <span id="splitOwner">R 0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>10% Admin African Bank:</span>
+                        <span id="splitAdmin">R 0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>10% Registration/Hosting:</span>
+                        <span id="splitHosting">R 0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>30% Computational Upgrades:</span>
+                        <span id="splitUpgrades">R 0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direct EFT Instruction Dropdown Block (Hidden by default, reveals if direct_eft is selected) -->
+            <div id="eftInstructionsBlock" class="hidden bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-6 font-mono text-xs space-y-3">
+                <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Direct Business Wire Parameters</span>
+                <p class="text-gray-400 text-[11px] leading-relaxed">To clear verification manually via direct banking transfer, route precisely to this endpoint:</p>
+                <div class="bg-gray-950 p-3 rounded-lg border border-gray-800 space-y-1 text-gray-300 text-[11px]">
+                    <p><strong>Bank Entity:</strong> First National Bank (FNB)</p>
+                    <p><strong>Account Holder:</strong> Stormcore Digital Infrastructures</p>
+                    <p><strong>Account Number:</strong> 629011425883</p>
+                    <p><strong>Branch Clearing Code:</strong> 250655</p>
+                    <p><strong>Reference Pattern:</strong> <span class="text-emerald-400 font-bold">STORMCORE-MANUAL</span></p>
+                </div>
+                <p class="text-[10px] text-gray-500 italic">Upload confirmation of payment notification arrays directly inside the customer support dashboard console node to clear state restrictions.</p>
+            </div>
+
+            <!-- Real-Time Activity Log Feedback Workspace -->
+            <div id="paymentConsoleLog" class="hidden bg-gray-950 border border-gray-800 rounded-xl p-4 font-mono text-[10px] text-gray-400 whitespace-pre-wrap leading-normal"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Reactive Client-Side Valuation Matrix Variables
+    let currentAmount = 0.00;
+    let currentTier = 'free';
+
+    function updatePricing(amount, tier) {
+        currentAmount = amount;
+        currentTier = tier;
+
+        // Sync main visual text targets
+        document.getElementById('summaryTier').innerText = tier + ' access';
+        document.getElementById('summaryCost').innerText = 'R ' + amount.toFixed(2);
+
+        // Run client-side display simulation matching the app.py master split ledger logic
+        document.getElementById('splitOwner').innerText = 'R ' + (amount * 0.50).toFixed(2);
+        document.getElementById('splitAdmin').innerText = 'R ' + (amount * 0.10).toFixed(2);
+        document.getElementById('splitHosting').innerText = 'R ' + (amount * 0.10).toFixed(2);
+        document.getElementById('splitUpgrades').innerText = 'R ' + (amount * 0.30).toFixed(2);
+
+        // Intelligently toggle EFT wiring instructions view block
+        const eftBlock = document.getElementById('eftInstructionsBlock');
+        const activeGateway = document.getElementById('paymentGateway').value;
+        if (activeGateway === 'direct_eft' && amount > 0) {
+            eftBlock.classList.remove('hidden');
+        } else {
+            eftBlock.classList.add('hidden');
+        }
+    }
+
+    // Monitor changes directly on the select element to display EFT details smoothly on the fly
+    document.getElementById('paymentGateway').addEventListener('change', function() {
+        updatePricing(currentAmount, currentTier);
+    });
+
+    // Main API Execution Event Listener
+    document.getElementById('executePaymentBtn').addEventListener('click', async () => {
+        const gateway = document.getElementById('paymentGateway').value;
+        const logBox = document.getElementById('paymentConsoleLog');
+        
+        logBox.classList.remove('hidden');
+        logBox.innerText = 'Connecting to regional payment network broker pipeline...\n';
+
+        if (currentAmount <= 0) {
+            logBox.innerText = '[VALIDATION FAILURE] Selected tier allocation contains no financial invoice requirements. Zero-cost accounts bypass clearing nodes directly.';
+            return;
+        }
+
+        try {
+            logBox.innerText += `Assembling cryptographic payload for gateway vector: [${gateway.toUpperCase()}]\n`;
+            logBox.innerText += `Injecting 2026-accurate compliance tokens into processing streams...\n`;
+
+            const res = await fetch('/api/payment/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gateway: gateway,
+                    amount: currentAmount,
+                    tier: currentTier
+                })
+            });
+            
+            const data = await res.json();
+
+            if (data.status === 'redirect') {
+                logBox.innerText += `Handshake verified. Displacing view window context to protected vendor validation frame. Please authorize the transaction there...`;
+                // Structural break to third party external payment framework processing frame (PayFast Sandbox / Ozow Live Endpoint Rails)
+                window.location.href = data.url;
+            } else if (data.status === 'success') {
+                logBox.innerText += `\n==================================================\n`;
+                logBox.innerText += `[TRANSACTION CLEARANCE SUCCESS]\n`;
+                logBox.innerText += `System Core Reference Tracking Signature: ${data.tx_id}\n`;
+                logBox.innerText += `Status Flag: 2026 CPA Cleared & Settled.\n`;
+                logBox.innerText += `Account privileges successfully upgraded to the verified state profile layer within the database engine. Navigate to the Workspace to run unlimited analytical modules immediately.`;
+            } else {
+                logBox.innerText += `\n[PROCESSING INTERRUPTION]: ${data.message}`;
+            }
+
+        } catch (err) {
+            logBox.innerText += `\n[SYSTEM ROUTING EXCEPTION]: Failed to establish connection matrix with remote bank endpoints. Details: ${err.message}`;
+        }
+    });
+</script>
+{% endblock %}
