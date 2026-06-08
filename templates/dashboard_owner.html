@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="space-y-8">
+    <div class="border-b border-gray-800 pb-4">
+        <h1 class="text-xl font-bold text-white">Sovereign Financial Ledger Router Terminal</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Real-time daily split allocation reporting matrices directly mapping to core operational nodes.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-mono">
+        <div class="bg-gray-900/40 border border-emerald-500/20 p-6 rounded-2xl space-y-2">
+            <span class="text-[10px] uppercase text-emerald-400 font-bold tracking-widest block">Owner Operational Split Account (50%)</span>
+            <p class="text-xs text-gray-500">Destination: First National Bank (FNB) Corporate Liquidity Ledger</p>
+            <span class="text-3xl font-black text-white block">R {{ "%.2f"|format(ledgers.owner_standard_bank_total_zar) }}</span>
+        </div>
+
+        <div class="bg-gray-900/40 border border-gray-800 p-6 rounded-2xl space-y-2">
+            <span class="text-[10px] uppercase text-gray-400 font-bold tracking-widest block">Admin Cushion Reserve Split (10%)</span>
+            <p class="text-xs text-gray-500">Destination: African Bank Secondary Strategic Savings Matrix</p>
+            <span class="text-3xl font-black text-white block">R {{ "%.2f"|format(ledgers.admin_african_bank_total_zar) }}</span>
+        </div>
+
+        <div class="bg-gray-900/40 border border-gray-800 p-6 rounded-2xl space-y-2">
+            <span class="text-[10px] uppercase text-gray-400 font-bold tracking-widest block">Company Registration Safe Haven (10%)</span>
+            <p class="text-xs text-gray-500">Cap Threshold Target: R5 000.00 Max Rule Parameter</p>
+            <span class="text-3xl font-black text-white block">R {{ "%.2f"|format(ledgers.company_registration_pool_zar) }} / 5000</span>
+        </div>
+
+        <div class="bg-gray-900/40 border border-gray-800 p-6 rounded-2xl space-y-2">
+            <span class="text-[10px] uppercase text-purple-400 font-bold tracking-widest block">Platform Server Hosting Overflow Pool</span>
+            <p class="text-xs text-gray-500">Activated automatically upon completion of the company registration fund</p>
+            <span class="text-3xl font-black text-white block">R {{ "%.2f"|format(ledgers.hosting_fees_pool_zar) }}</span>
+        </div>
+
+        <div class="bg-gray-900/40 border border-indigo-500/20 p-6 rounded-2xl space-y-2">
+            <span class="text-[10px] uppercase text-indigo-400 font-bold tracking-widest block">System Computational Upgrades Budget (30%)</span>
+            <p class="text-xs text-gray-500">Allocated capital reserves for deployment scaling modules and infrastructure</p>
+            <span class="text-3xl font-black text-white block">R {{ "%.2f"|format(ledgers.system_upgrades_pool_zar) }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
