@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+    <div class="bg-gray-900/40 border border-gray-800 rounded-2xl p-6 space-y-5 shadow-xl h-fit">
+        <div>
+            <h1 class="text-lg font-bold text-white">Rule-Aware Ad Optimization Engine</h1>
+            <p class="text-xs text-gray-400 mt-1">Generates network-specific marketing creatives automatically updated for 2026 platform frameworks.</p>
+        </div>
+
+        <div>
+            <label class="block text-[10px] font-bold uppercase text-emerald-400 tracking-wider mb-1.5">Select Inbound Platform Destination</label>
+            <select id="platformSelect" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-white font-mono">
+                <option value="linkedin">LinkedIn Professional Matrix Protocol</option>
+                <option value="facebook">Facebook Core Placement Feeds</option>
+                <option value="google">Google Core Search Lander Network</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="block text-[10px] font-bold uppercase text-emerald-400 tracking-wider mb-1.5">Select Creative Pitch Tier Match</label>
+            <select id="tierSelect" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-white font-mono">
+                <option value="basic">Basic Once-Off Access Pitch (R150)</option>
+                <option value="pro">Pro Structural Layout Pitch (R350)</option>
+                <option value="enterprise">Enterprise Portfolio Suite Pitch (R600)</option>
+            </select>
+        </div>
+
+        <button id="generateAdsBtn" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-black font-extrabold text-xs uppercase tracking-wider rounded-xl hover:opacity-95 transition">
+            Generate Compliant Asset Deliverables
+        </button>
+    </div>
+
+    <div class="lg:col-span-2 bg-gray-950 border border-gray-800 rounded-2xl p-6 space-y-6 font-mono min-h-[400px] flex flex-col justify-center">
+        <div id="marketingPlaceholder" class="text-center text-xs text-gray-500 italic">
+            Select optimization variables on the left pane to execute generation sequence.
+        </div>
+        
+        <div id="marketingOutput" class="hidden space-y-5 text-xs">
+            <div class="p-4 bg-gray-900 rounded-xl border border-gray-800 space-y-1.5">
+                <span class="text-[9px] uppercase font-bold text-emerald-400 tracking-widest">Algorithmic Headline Variation Output</span>
+                <p id="adHeadline" class="text-white font-bold text-sm"></p>
+            </div>
+            <div class="p-4 bg-gray-900 rounded-xl border border-gray-800 space-y-1.5">
+                <span class="text-[9px] uppercase font-bold text-emerald-400 tracking-widest">Compliant High-Conversion Ad Body Text Block</span>
+                <p id="adBody" class="text-gray-300 leading-relaxed whitespace-pre-wrap"></p>
+            </div>
+            <div class="p-4 bg-gray-900 rounded-xl border border-gray-800 space-y-1.5">
+                <span class="text-[9px] uppercase font-bold text-purple-400 tracking-widest">Optimized Landing Page Framework Title</span>
+                <p id="landingTitle" class="text-white font-bold"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('generateAdsBtn').addEventListener('click', async () => {
+        const platform = document.getElementById('platformSelect').value;
+        const tier = document.getElementById('tierSelect').value;
+        const placeholder = document.getElementById('marketingPlaceholder');
+        const output = document.getElementById('marketingOutput');
+
+        placeholder.innerText = 'Analyzing compliance parameters and scanning network boundaries...';
+        output.classList.add('hidden');
+
+        const res = await fetch('/api/marketing/generate', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ platform: platform, tier: tier })
+        });
+        const data = await res.json();
+
+        placeholder.classList.add('hidden');
+        output.classList.remove('hidden');
+
+        document.getElementById('adHeadline').innerText = data.ad_headline;
+        document.getElementById('adBody').innerText = data.ad_body_text;
+        document.getElementById('landingTitle').innerText = data.landing_page_title;
+    });
+</script>
+{% endblock %}
